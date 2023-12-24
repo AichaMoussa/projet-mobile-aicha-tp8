@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private MyDatabaseHelper database;
-    private ArrayList<Person> listcontact;
+    private ArrayList<Contact> listcontact;
 
     private Myadapter adapter;
 
@@ -30,11 +30,11 @@ public class MainActivity extends AppCompatActivity {
         database= new MyDatabaseHelper(MainActivity.this);
         listcontact = new ArrayList<>();
 
-        ImageButton ajouter = findViewById(R.id.imageButton);
+       Button ajouter = findViewById(R.id.btn_ajouter);
         ListView liste = findViewById(R.id.listePersonnes);
         liste.setAdapter(adapter);
-        EditText Nom = findViewById(R.id.nominput);
-        EditText tel = findViewById(R.id.telinput);
+        EditText Nom = findViewById(R.id.valuenom);
+        EditText tel = findViewById(R.id.valuenum);
 
         // Initialize the adapter
         adapter = new Myadapter(this, listcontact);
@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String name = Nom.getText().toString().trim();
                 String phone = tel.getText().toString().trim();
-                database.addPerson(name, phone);
-                listcontact.add(new Person(name, phone));
+                database.addcontact(name, phone);
+                listcontact.add(new Contact(name, phone));
                 adapter.notifyDataSetChanged();
                 Nom.setText("");
                 tel.setText("");
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         liste.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Person selectedPerson = listcontact.get(position);
+                Contact selectedPerson = listcontact.get(position);
 
                 handleListItemClick(selectedPerson);
             }
@@ -78,13 +78,13 @@ public class MainActivity extends AppCompatActivity {
             while (cursor.moveToNext()) {
                 String name = cursor.getString(1);
                 String phone = cursor.getString(2);
-                listcontact.add(new Person(name, phone));
+                listcontact.add(new Contact(name, phone));
             }
         }
         adapter.notifyDataSetChanged();
         cursor.close();
     }
-    private void handleListItemClick(Person selectedPerson) {
+    private void handleListItemClick(Contact selectedPerson) {
 
         Intent intent = new Intent(this, CallActivity.class);
 
